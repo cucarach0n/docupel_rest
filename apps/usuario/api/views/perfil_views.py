@@ -1,8 +1,7 @@
 from rest_framework.response import Response
-from rest_framework.views import APIView
-from apps.usuario.models import User,Perfil
-from apps.usuario.api.serializers.user_serializers import UserCreateSerializer
-from apps.usuario.api.serializers.perfil_serializers import PerfilCreateSerializer,PerfilSerializer
+from apps.usuario.models import User
+from apps.usuario.api.serializers.user_serializers import UserCreateSerializer, UserSerializer
+#from apps.usuario.api.serializers.perfil_serializers import PerfilCreateSerializer,PerfilSerializer
 from rest_framework import viewsets
 from rest_framework import status
 #from apps.base.util import send_email, send_password
@@ -45,16 +44,16 @@ class verAvatar(Authentication,viewsets.GenericViewSet):
         return Response(perfil_serializer.data, status = status.HTTP_200_OK )'''
 
 class PerfilViewSet(viewsets.GenericViewSet):
-    serializer_class = PerfilCreateSerializer
+    serializer_class = UserCreateSerializer
     def get_queryset(self):
-        return Perfil.objects.all()
+        return User.objects.all()
     def list(self,request):
-        perfil = self.get_queryset()
-        perfil_serializer = PerfilSerializer(perfil,many = True)
-        return Response(perfil_serializer.data, status = status.HTTP_200_OK )
+        userList = self.get_queryset()
+        user_serializer = UserSerializer(userList,many = True)
+        return Response(user_serializer.data, status = status.HTTP_200_OK )
     def create(self,request):
-        Perfil_serializer = self.serializer_class(data = request.data,context = request.data)
-        if Perfil_serializer.is_valid():
+        User_serializer = self.serializer_class(data = request.data)
+        if User_serializer.is_valid():
             #current_site = get_current_site(request).domain
             '''fs = FileSystemStorage(location= settings.MEDIA_ROOT +'avatars/')
             file = fs.save(request.FILES['avatar'].name.replace(" ","_"),request.FILES['avatar'])
@@ -66,7 +65,7 @@ class PerfilViewSet(viewsets.GenericViewSet):
 
             #absURl = 'http://'+current_site+'/media/avatars'+ doc
             #absURl = 'avatars/'+ doc
-            datosUsuario = {'correo':Perfil_serializer.validated_data['correo'],
+            '''datosUsuario = {'correo':Perfil_serializer.validated_data['correo'],
                             'password':Perfil_serializer.validated_data['password']
                             }
             usuario_serializer = UserCreateSerializer(data = datosUsuario)
@@ -81,8 +80,10 @@ class PerfilViewSet(viewsets.GenericViewSet):
                 perfilObject.save()
 
                 return Response(PerfilSerializer(perfilObject).data,status = status.HTTP_201_CREATED)
-            return Response(usuario_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
-        return Response(Perfil_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+            return Response(usuario_serializer.errors,status = status.HTTP_400_BAD_REQUEST)'''
+            user = User_serializer.save()
+            return Response(UserSerializer(user).data,status = status.HTTP_201_CREATED)
+        return Response(User_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
 
 
 """class userActivateRetrieveAPIView(APIView):

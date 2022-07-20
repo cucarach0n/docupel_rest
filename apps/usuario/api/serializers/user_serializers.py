@@ -1,33 +1,52 @@
 from rest_framework import serializers
-from apps.usuario.models import User
+from apps.usuario.models import  User
 
 class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['correo','name','last_name','avatar','is_staff','is_superuser','is_active']
-    def validate_avatar(self,value):
-        return value
+        fields = ['correo','last_login','is_superuser','habilitado']
     def validate(self,data):
         print('usuario token validado!')
         return data
-class UserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        #fields = ['name']
-        exclude = ('password','last_login',)
     def to_representation(self,instance):
         return {
         "id": instance.id,
         "correo": instance.correo,
-        "is_superuser": instance.is_superuser,
+        #"is_superuser": instance.is_superuser,
+        "username": instance.username,
+        "dni": instance.dni,
+        "genero": instance.genero,
+        "avatar": instance.avatar.name,
+        "numeroTelefono": instance.numeroTelefono,
+        "tipoCuenta": instance.tipoCuenta,
         "last_login": instance.last_login,
-        "fechaUpdate": instance.fechaUpdate,
+        "fechaCreacion": instance.fechaCreacion,
+        "habilitado": instance.habilitado
+    }
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        #fields = ['name']
+        exclude = ('password',)
+    def to_representation(self,instance):
+        return {
+        "id": instance.id,
+        "correo": instance.correo,
+        #"is_superuser": instance.is_superuser,
+        "username": instance.username,
+        "dni": instance.dni,
+        "genero": instance.genero,
+        "avatar": instance.avatar.name,
+        "numeroTelefono": instance.numeroTelefono,
+        "tipoCuenta": instance.tipoCuenta,
+        "last_login": instance.last_login,
+        "fechaCreacion": instance.fechaCreacion,
         "habilitado": instance.habilitado
     }
 class UserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ('id','habilitado','last_login','is_superuser',)                
+        exclude = ('id','habilitado','last_login','is_superuser','tipoCuenta','groups','user_permissions',)                
     #def validate_correo(self, value):
     #    if '@fip.uni.edu.pe' not in value and '@uni.edu.pe' not in value:
     #        raise serializers.ValidationError('Error, el correo no es valido para esta institucion')
@@ -50,10 +69,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return user_actualisado
 class UserUpdateSerializer(serializers.Serializer):
     #history_id = serializers.CharField()
-    name = serializers.CharField()
-    last_name = serializers.CharField()
     password = serializers.CharField(allow_blank=True)
-    avatar = serializers.ImageField(allow_null=True)
     class Meta:
         model = User
     
@@ -77,7 +93,7 @@ class UserDisabledSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['id','is_active']
+        fields = ['id','habilitado']
     def validate(self,data):
         return data
 
