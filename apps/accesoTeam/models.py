@@ -1,15 +1,16 @@
 from django.db import models
-
-class Rol(models.Model):
-    idRol = models.AutoField(primary_key = True)
+#from apps.workspace.models import Team
+class RolTeam(models.Model):
+    idRolTeam = models.AutoField(primary_key = True)
     nombreRol = models.CharField('Nombre rol',max_length=100,null = False, blank = False)
     descripcionRol = models.CharField('Descripcion',max_length=255,null = True, blank = True)
     colorRol = models.CharField('Color rol',max_length=7,null = True, blank = True)
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
+    team = models.ForeignKey("workspace.team", on_delete=models.CASCADE)
     class Meta:
-        verbose_name = 'Rol'
-        verbose_name_plural = 'Roles'
+        verbose_name = 'Rol Team'
+        verbose_name_plural = 'Roles Teams'
 
     #REQUIRED_FIELDS = ['correo']
 
@@ -34,12 +35,12 @@ class Permiso(models.Model):
 
 class PermisoRol(models.Model):
     idPermisoRol = models.AutoField(primary_key = True)
-    idRol = models.ForeignKey(Rol, on_delete=models.CASCADE)
-    idPermiso = models.ForeignKey(Permiso, on_delete=models.CASCADE)
+    rol = models.ForeignKey(RolTeam, on_delete=models.CASCADE)
+    permiso = models.ForeignKey(Permiso, on_delete=models.CASCADE)
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
-    estado = models.BooleanField("Default", default=False)
-
+    activo = models.BooleanField("Default", default=False)
+    tipoRol = models.CharField('Tipo rol',max_length=1,null = False, blank = False,default='0')
     class Meta():
         verbose_name = 'PermisoRol'
         verbose_name_plural = 'PermisoRoles'

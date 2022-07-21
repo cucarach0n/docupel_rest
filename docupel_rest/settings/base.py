@@ -42,6 +42,9 @@ BASE_APPS = [
 
 LOCAL_APPS =[
     'apps.usuario',
+    'apps.accesoTeam',
+    'apps.workspace',
+    
 ]
 
 THIRD_APPS = [
