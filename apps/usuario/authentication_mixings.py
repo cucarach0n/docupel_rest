@@ -12,7 +12,7 @@ class Authentication(object):
     def get_user(self,request):
         token = get_authorization_header(request).split()
         current_site = resolve(request.path_info).url_name
-        print(current_site)
+        #print(current_site)
         if token:
             print('Validando peticion de :')
             try:
@@ -38,11 +38,11 @@ class Authentication(object):
         #se encontro un token en la peticion
         
         if user is not None:
-            print(self.userFull)
+            #print(self.userFull)
             if self.userFull.is_superuser:
                 print('Administrador : '+ self.userFull.correo )
                 print(request.path)
-            print('Despachando peticion al usuario ' + user.correo)
+            #print('Despachando peticion al usuario ' + user.correo)
             '''
             if type(user) == str:
                 response = Response({'error':user,'expired':self.user_token_expire},status = status.HTTP_400_BAD_REQUEST)

@@ -4,11 +4,12 @@ from django.db import models
 class Team(models.Model):
     idTeam = models.AutoField(primary_key = True)
     nombreTeam = models.CharField('Nombre rol',max_length=150,null = False, blank = False)
-    iconoTeam = models.ImageField('Imagen del team', upload_to='teamIcono', default="teamIcono/defaultIcono.png",max_length=255, null=True, blank = True)
+    iconoTeam = models.ImageField('Imagen del team', upload_to='teamIcono/', default="teamIcono/defaultIcono.png",max_length=255, null=True, blank = True)
     imagenFondo = models.ImageField('Fondo del team', upload_to='teamBackground/', default="teamBackground/defaultBackground.png",max_length=255, null=True, blank = True)
     descripcionTeam = models.CharField('Descripcion',max_length=255,null = True, blank = True)
-    tipoTeam = models.CharField('Tipo de team',max_length=1,null = False, blank = False,default="1")
+    tipoTeam = models.CharField('Tipo de team',max_length=1,null = True, blank = True,default="0")
     estadoTeam = models.BooleanField("Estado", default=True)
+    maxStorage = models.IntegerField("Maximo de storage", default=5)#capacidad en Gb
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
     class Meta:
@@ -21,9 +22,10 @@ class Team(models.Model):
 class TeamUsuario(models.Model):
     idTeamUsuario = models.AutoField(primary_key = True)
     username = models.CharField('Nombre rol',max_length=150,null = False, blank = False)
-    imagenPerfil = models.ImageField('Imagen del Perfil', upload_to='perfil', default="perfil/defaultPerfil.png",max_length=255, null=True, blank = True)
+    imagenPerfil = models.ImageField('Imagen del Perfil', upload_to='perfil/', default="perfil/defaultPerfil.png",max_length=255, null=True, blank = True)
     team = models.ForeignKey(Team, on_delete=models.CASCADE)
     usuario = models.ForeignKey("usuario.user", on_delete=models.CASCADE)
+    owner = models.BooleanField("Es el owner", default=False)
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
     class Meta:

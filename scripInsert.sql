@@ -1,0 +1,13 @@
+use docupel_bd;
+insert into accesoTeam_permiso values(1,'crear','Este permiso te permite crear archivos en el team',now(),now(),1);
+insert into accesoTeam_permiso values(2,'vista/leer','Este permiso te permite visualizar los archivos del team',now(),now(),1);
+insert into accesoTeam_permiso values(3,'editar','Este permiso te permite actualizar los detalles de los archivos del team',now(),now(),0);
+insert into accesoTeam_permiso values(4,'eliminar','Este permiso te permite eliminar los archivos del team',now(),now(),0);
+insert into accesoTeam_permiso values(5,'mover','Este permiso te permite mover los archivos en el team',now(),now(),0);
+insert into accesoTeam_permiso values(6,'backup','Este permiso te permite hacer un backup de los sarchivos del team',now(),now(),0);
+insert into accesoTeam_permiso values(7,'compartir','Este permiso te permite compartir entre usuarios los archivos del team',now(),now(),0);
+insert into accesoTeam_permiso values(8,'enviar por correo','Este permiso te permite enviar los archivos del team via email',now(),now(),0);
+insert into accesoTeam_permiso values(9,'descargar','Este permiso te permite descargar los archivos del team',now(),now(),1);
+insert into accesoTeam_permiso values(10,'invitar','Este permiso te permite invitar usuarios al team',now(),now(),0);
+insert into accesoTeam_permiso values(11,'moderador','Este permiso te permite banear y expulsar a los usuarios del team',now(),now(),0);
+insert into accesoTeam_permiso values(12,'roles','Este permiso te permite crear y asignar roles a los usuario del team',now(),now(),0);
