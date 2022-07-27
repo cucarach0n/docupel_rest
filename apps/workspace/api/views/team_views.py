@@ -13,8 +13,8 @@ from apps.accesoTeam.models import RolTeam,Permiso,PermisoRol
 
 def crearRolesDefault(team,perfilAdmin):
     roles = [
-        {'nombreRol':'ownerPerma','descripcionRol':'Dueño del team','colorRol':'#FF0000','team':team},
-        {'nombreRol':'everyone','descripcionRol':'Rol para todos los usuarios','colorRol':'#000000','team':team}
+        {'nombreRol':'ownerPerma','descripcionRol':'Dueño del team','colorRol':'#FF0000','team':team,'tipoRol':'2'},
+        {'nombreRol':'everyone','descripcionRol':'Rol para todos los usuarios','colorRol':'#000000','team':team,'tipoRol':'1'}
     ]
     permisosList = Permiso.objects.all()
     for rol in roles:
@@ -22,12 +22,12 @@ def crearRolesDefault(team,perfilAdmin):
         rol_obj.save()
         if(rol_obj.nombreRol == 'ownerPerma'):
             for permiso in permisosList:
-                permiso_obj = PermisoRol.objects.create(rol=rol_obj,permiso=permiso,activo=True,tipoRol='2')
+                permiso_obj = PermisoRol.objects.create(rol=rol_obj,permiso=permiso,activo=True)
                 permiso_obj.save()
         else:
             for permiso in permisosList:
                 if(permiso.default):
-                    permiso_obj = PermisoRol.objects.create(rol=rol_obj,permiso=permiso,activo=True,tipoRol = '1')
+                    permiso_obj = PermisoRol.objects.create(rol=rol_obj,permiso=permiso,activo=True)
                     permiso_obj.save()
     
     rolUsuario = RolUsuario.objects.create(teamUsuario = perfilAdmin,rolTeam = RolTeam.objects.get(nombreRol='ownerPerma',team=team))

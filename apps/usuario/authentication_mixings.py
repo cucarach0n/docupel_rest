@@ -8,7 +8,7 @@ from apps.usuario.models import User
 class Authentication(object):
     user = None
     userFull = None
-
+    
     def get_user(self,request):
         token = get_authorization_header(request).split()
         current_site = resolve(request.path_info).url_name

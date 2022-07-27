@@ -48,6 +48,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('usuario/', include('apps.usuario.api.routers')),
     path('workspace/', include('apps.workspace.api.routers')),
+    path('team/', include('apps.accesoTeam.api.routers')),
 ] #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

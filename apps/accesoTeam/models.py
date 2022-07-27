@@ -8,6 +8,7 @@ class RolTeam(models.Model):
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
     team = models.ForeignKey("workspace.team", on_delete=models.CASCADE)
+    tipoRol = models.CharField('Tipo rol',max_length=1,null = False, blank = False,default='0')
     class Meta:
         verbose_name = 'Rol Team'
         verbose_name_plural = 'Roles Teams'
@@ -15,13 +16,13 @@ class RolTeam(models.Model):
     #REQUIRED_FIELDS = ['correo']
 
     def __str__(self):
-        return f'Rol {self.nombreRol} con el id {self.idRol}'
+        return f'Rol {self.nombreRol} con el id {self.idRolTeam}'
 
 
 class Permiso(models.Model):
     idPermiso = models.AutoField(primary_key = True)
     nombrePermiso = models.CharField('Nombres',max_length=100,null = False, blank = False)
-    descripcionPermiso = models.ImageField('Imagen de perfil', upload_to='avatars/', default="avatars/avataruni.png",max_length=255, null=True, blank = True)
+    descripcionPermiso = models.CharField('Descripcion permiso',max_length=255,null = True, blank = True)
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
     default = models.BooleanField("Default", default=False)
@@ -40,10 +41,9 @@ class PermisoRol(models.Model):
     fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
     fechaUpdate = models.DateTimeField("Fecha de actualizacion",auto_now=True)
     activo = models.BooleanField("Default", default=False)
-    tipoRol = models.CharField('Tipo rol',max_length=1,null = False, blank = False,default='0')
     class Meta():
         verbose_name = 'PermisoRol'
         verbose_name_plural = 'PermisoRoles'
     
     def __str__(self):
-        return "PermisoId {1} con RolId {0}".format(self.idPermiso,self.idRol)        
+        return "PermisoId {0} con RolId {1}".format(self.idPermisoRol,self.rol)        
