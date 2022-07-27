@@ -16,6 +16,13 @@ class PermisoRolViewSet(Authentication,viewsets.GenericViewSet):
             return PermisoRol.objects.filter(rol = rolTeam)
         return None
     def list(self,request):
+        '''
+        Listar permisos de 1 rol
+
+        parametros
+        - idRolTeam int
+        - idTeam int
+        '''
         Permisos = ['roles']
         rolTeamPermiso_serializer = PermisoRolTeamSerializer(data = request.data)
         if rolTeamPermiso_serializer.is_valid():  
@@ -29,6 +36,15 @@ class PermisoRolViewSet(Authentication,viewsets.GenericViewSet):
                 return Response({"mensaje":"No tiene permisos para eliminar un rol"}, status = status.HTTP_403_FORBIDDEN)
         return Response(rolTeamPermiso_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
     def create(self,request):
+        '''
+        Asignar permiso en un rol
+
+        parametros
+        - rolId int
+        - permisoId int
+        - activo boolean
+        - teamId int
+        '''
         Permisos = ['roles']
         permisoRol_serializer = self.serializer_class(data = request.data)
         if permisoRol_serializer.is_valid():
@@ -40,6 +56,15 @@ class PermisoRolViewSet(Authentication,viewsets.GenericViewSet):
                 return Response({"mensaje":"No tiene permisos para crear un rol"}, status = status.HTTP_403_FORBIDDEN)
         return Response(permisoRol_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
     def destroy(self,request,pk=None):
+        '''
+        Eliminar un permiso de un rol
+
+        parametros por url /permisoId/
+        - permisoId int
+
+        parametros
+        - rolId int
+        '''
         Permisos = ['roles']
         rolTeamPermiso_serializer = PermisoRolTeamSerializer(data = request.data)
         if rolTeamPermiso_serializer.is_valid():  
