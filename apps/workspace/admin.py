@@ -5,3 +5,5 @@ from apps.workspace.models import *
 admin.site.register(Team)
 admin.site.register(TeamUsuario)
 admin.site.register(RolUsuario)
+admin.site.register(InvitacionTeam)
+admin.site.register(InvitacionUsuario)

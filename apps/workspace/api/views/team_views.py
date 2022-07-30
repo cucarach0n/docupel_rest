@@ -1,3 +1,4 @@
+import os
 from apps.workspace.models import Team
 from rest_framework.response import Response
 from apps.workspace.models import Team,TeamUsuario,RolUsuario
@@ -39,10 +40,28 @@ class TeamViewSet(Authentication,viewsets.GenericViewSet):
     def get_queryset(self):
         return Team.objects.filter(teamusuario__usuario = self.userFull,teamusuario__owner = True)
     def list(self,request):
+        '''
+        Listar teams
+
+        parametros
+        - no requiere parametros
+        '''
         teamList = self.get_queryset()
         team_serializer = TeamDetailSerializer(teamList,many = True)
         return Response(team_serializer.data, status = status.HTTP_200_OK )
     def create(self,request):
+        '''
+        Crear team
+
+        Solo los usuarios con el tipoCuenta 1,2,3 pueden crear un team
+
+        parametros
+        - nombreTeam varchar(150)
+        - iconoTeam File Imagen
+        - imagenFondo File Imagen
+        - descripcionTeam varchar(255)
+        - maxStorage int
+        '''
         team_serializer = self.serializer_class(data = request.data)
         if team_serializer.is_valid():
             flagCreate = False
@@ -89,3 +108,29 @@ class TeamViewSet(Authentication,viewsets.GenericViewSet):
                 return Response({"mensaje":"No tienes permisos para crear un team"},status = status.HTTP_403_FORBIDDEN)
             
         return Response(team_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+    def update(self,request,pk=None):
+        '''
+        Actualizar team
+
+        Solo el propietario del team puede ejecutar esta accion
+
+        parametros
+        - nombreTeam varchar(150)
+        - iconoTeam File Imagen
+        - imagenFondo File Imagen
+        - descripcionTeam varchar(255)
+        - maxStorage int
+        '''
+        teamUsuario = TeamUsuario.objects.filter(team_id = pk,usuario = self.userFull,owner = True).first()
+        if teamUsuario:
+            team = Team.objects.get(pk = pk)
+            if team:
+                team_serializer = self.serializer_class(team,data = request.data)
+                if team_serializer.is_valid():
+                    os.remove(team.iconoTeam.path)
+                    os.remove(team.imagenFondo.path)
+                    team_serializer.save()
+                    return Response(team_serializer.data,status = status.HTTP_200_OK)
+                return Response(team_serializer.errors,status = status.HTTP_400_BAD_REQUEST)
+            return Response({"mensaje":"Team no encontrado o no existe"},status = status.HTTP_404_NOT_FOUND)
+        return Response({"mensaje":"No tienes permisos para actualizar este team"},status = status.HTTP_403_FORBIDDEN)

@@ -20,7 +20,7 @@ class RolTeamViewSet(Authentication,viewsets.GenericViewSet):
     serializer_class = RolTeamCreateSerializer
     def get_queryset(self,team = None):
         if team is not None:
-            return self.serializer_class.Meta.model.objects.filter(team = team,tipoRol = '0')
+            return self.serializer_class.Meta.model.objects.filter(team = team,tipoRol__in = ['0','1'])
         return None
     def list(self,request):
         '''
@@ -74,7 +74,7 @@ class RolTeamViewSet(Authentication,viewsets.GenericViewSet):
         - colorRol varchar(7)
         '''
         Permisos = ['roles']
-        rolTeam_obj = self.serializer_class.Meta.model.objects.get(idRolTeam = pk)
+        rolTeam_obj = self.serializer_class.Meta.model.objects.get(idRolTeam = pk,tipoRol__in = ['0','1'])
         if rolTeam_obj:
             rolTeam_serializer = RolTeamUpdateSerializer(data = request.data,instance = rolTeam_obj)
             if rolTeam_serializer.is_valid():
@@ -93,7 +93,7 @@ class RolTeamViewSet(Authentication,viewsets.GenericViewSet):
         - idRolTeam int
         '''
         Permisos = ['roles']
-        rolTeam_obj = self.serializer_class.Meta.model.objects.get(idRolTeam = pk)
+        rolTeam_obj = self.serializer_class.Meta.model.objects.get(idRolTeam = pk,tipoRol__in = ['0','1'])
         if rolTeam_obj:
             if(validarPermisos(Permisos,self.userFull,rolTeam_obj.team)):
                 rolTeam_obj.delete()

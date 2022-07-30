@@ -49,3 +49,29 @@ class RolUsuario(models.Model):
         return f'Rol {self.idRolUsuario}'
 
 
+class InvitacionTeam(models.Model):
+    idInvitacionTeam = models.AutoField(primary_key = True)
+    fechaCreacion = models.DateTimeField("Fecha de creacion",auto_now_add=True)
+    tipoInvitacion = models.CharField('Tipo de invitacion',max_length=1,null = True, blank = True,default="0")
+    cantidadInvitacion = models.IntegerField("Saldo de invitacion", default=0)
+    fechaExpiracion = models.DateTimeField("Fecha de expiracion",null = True, blank = True)
+    slugInvitacion = models.SlugField(unique=True, max_length=11, blank=True, null=True)
+    teamUsuario = models.ForeignKey(TeamUsuario, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'Invitacion Team'
+        verbose_name_plural = 'Invitaciones Teams'
+
+    def __str__(self):
+        return f'Invitacion {self.idInvitacionTeam} creado para el team {self.teamUsuario.team.nombreTeam}'
+
+class InvitacionUsuario(models.Model):
+    idInvitacionUsuario = models.AutoField(primary_key = True)
+    invitacionTeam = models.ForeignKey(InvitacionTeam, on_delete=models.CASCADE)
+    usuario = models.ForeignKey("usuario.user", on_delete=models.CASCADE)
+    fechaUnion = models.DateTimeField("Fecha de union",null = True, blank = True)
+    class Meta:
+        verbose_name = 'Invitacion Usuario'
+        verbose_name_plural = 'Invitaciones Usuarios'
+
+    def __str__(self):
+        return f'InvitacionUsuarioId {self.idInvitacionUsuario} se unio el usuario {self.usuario.username}'
